@@ -45,11 +45,6 @@ python -m platformio run -e default -t upload
 
 Built and tested on the Xteink X4 (ESP32-C3, the `default` build environment). 
 
-## Limitations
-
-- No images on cards.
-- Currently only supports English
-
 ## License and attribution
 
 Built on [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader). Not affiliated with Xteink or Anki.

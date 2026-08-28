@@ -10,17 +10,7 @@ int AnkiConnectClient::lastHttpCode = 0;
 
 namespace {
 
-// Strips HTML tags for on-screen display. AnkiConnect's "question"/"answer"
-// fields are rendered HTML (the same markup Anki's desktop card view shows),
-// which the E-Ink renderer has no use for. This is deliberately simple: drop
-// anything between < and >, then collapse a few common entities. It is not a
-// real HTML parser and doesn't need to be -- it only has to make typical
-// Basic-note-type cards (plain text, maybe a <b> or <br>) readable.
-//
-// AnkiConnect's rendered HTML includes the note type's <style> block (the
-// card CSS), which a tag-only stripper leaves behind as literal text (e.g.
-// "font-family: ..." showing up on screen). Strip those elements' contents
-// entirely, not just their tags, before the general tag-strip pass.
+
 std::string removeElementAndContents(std::string s, const std::string& tag) {
   const std::string openPrefix = "<" + tag;
   const std::string closeTag = "</" + tag + ">";
@@ -38,11 +28,7 @@ std::string removeElementAndContents(std::string s, const std::string& tag) {
   return s;
 }
 
-// Anki's default "Back" card templates render as: the front content again,
-// then a divider (<hr id=answer>), then the actual back content -- so the
-// raw "answer" HTML always contains the front duplicated at the top. Split
-// on that divider and keep only what follows it; if no divider is found
-// (a custom template without one), fall back to the whole string unchanged.
+
 std::string extractAnswerOnly(const std::string& rawAnswerHtml) {
   const size_t markerPos = rawAnswerHtml.find("id=answer");
   if (markerPos == std::string::npos) {
@@ -110,13 +96,7 @@ std::string stripHtml(const std::string& rawInput) {
   return collapsed;
 }
 
-// A TLS handshake (needed for https:// -- a cloud/remote AnkiConnect server)
-// has real memory requirements this device can fail to meet, especially
-// with WiFi already up and the UI framebuffer allocated. KOReaderSyncClient
-// hit this exact failure mode first; these thresholds and the reasoning
-// behind them are copied from there rather than re-derived. Skipped
-// entirely for http:// (a local AnkiConnect instance) -- no handshake, no
-// requirement.
+
 constexpr uint32_t MIN_FREE_FOR_TLS = 35000;
 constexpr uint32_t MIN_BLOCK_FOR_TLS = 20000;
 
@@ -131,8 +111,7 @@ bool insufficientHeapForTls() {
   return false;
 }
 
-// Sends one AnkiConnect request and returns the parsed response document.
-// Returns OK with `outDoc` populated, or an error code on failure.
+
 AnkiConnectClient::Error sendRequest(const std::string& action, const JsonDocument& params, JsonDocument& outDoc) {
   AnkiConnectClient::lastHttpCode = 0;
 
@@ -166,12 +145,7 @@ AnkiConnectClient::Error sendRequest(const std::string& action, const JsonDocume
     LOG_ERR("ANKICONNECT", "Bad server URL: %s", serverUrl.c_str());
     return AnkiConnectClient::NETWORK_ERROR;
   }
-  // For https:// URLs (a cloud/remote AnkiConnect server), skip certificate
-  // verification -- this project's TLS transport has no CA bundle wired up
-  // yet (see KOReaderSyncClient, which does the same for the same reason).
-  // The connection is still encrypted; it just doesn't confirm the server's
-  // identity via its certificate. A no-op for plain http:// URLs (a local
-  // AnkiConnect instance).
+
   http.setInsecure();
   http.addHeader("Content-Type", "application/json");
   http.setTimeout(10000);
@@ -228,10 +202,10 @@ AnkiConnectClient::Error AnkiConnectClient::getDueCards(std::vector<AnkiCardData
   JsonArrayConst ids = findResult["result"].as<JsonArrayConst>();
   if (ids.isNull() || ids.size() == 0) {
     LOG_DBG("ANKICONNECT", "No due cards found");
-    return OK;  // Not an error -- just nothing to review right now.
+    return OK; 
   }
 
-  // Step 2: fetch details for up to `limit` of those cards.
+ 
   JsonDocument infoParams;
   JsonArray cardIdsArr = infoParams["cards"].to<JsonArray>();
   int count = 0;

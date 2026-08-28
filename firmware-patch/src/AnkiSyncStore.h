@@ -4,21 +4,6 @@
 
 #include <string>
 
-/**
- * Singleton class for storing AnkiConnect sync settings on the SD card.
- * serverUrl and selectedDeck are plain settings. apiKey is present for
- * remote/cloud AnkiConnect servers that have API-key authentication enabled
- * (required for any AnkiConnect instance reachable outside a trusted local
- * network) -- left empty, it is simply omitted from requests, which is
- * correct for a local, unauthenticated AnkiConnect instance.
- *
- * DEFAULT_SERVER_URL / DEFAULT_API_KEY below only take effect on a device
- * with no saved settings file yet (a fresh flash, or after clearing the SD
- * card's /.crosspoint folder). Once a value has been saved -- whether by
- * the defaults below or by editing it on-device -- the saved file always
- * wins on subsequent boots; these are just the starting point, not a
- * permanent override. Editing the Settings screen still works normally.
- */
 class AnkiSyncStore : public PersistableStore<AnkiSyncStore> {
  private:
   // EDIT THESE TWO LINES with your real values before building, or leave

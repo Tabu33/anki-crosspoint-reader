@@ -19,20 +19,7 @@ class RenderLock;  // forward declaration
 
 enum class HomeMenuItem { NONE, FILE_BROWSER, RECENTS, OPDS_BROWSER, FILE_TRANSFER, SETTINGS_MENU, ANKI };
 
-/**
- * ActivityManager
- *
- * This mirrors the same concept of Activity in Android, where an activity represents a single screen of the UI. The
- * manager is responsible for launching activities, and ensuring that only one activity is active at a time.
- *
- * It also provides a stack mechanism to allow activities to launch sub-activities and get back the results when the
- * sub-activity is done. For example, the WebServer activity can launch a WifiSelect activity to let the user choose a
- * wifi network, and get back the selected network when the user is done.
- *
- * Main differences from Android's ActivityManager:
- * - No onPause/onResume, since we don't have a concept of background activities
- * - onActivityResult is implemented via a callback instead of a separate method, for simplicity
- */
+
 class ActivityManager {
   friend class RenderLock;
 
@@ -55,11 +42,11 @@ class ActivityManager {
   [[noreturn]] virtual void renderTaskLoop();
 
   // Set by requestUpdateAndWait(); read and cleared by the render task after render completes.
-  // Note: only one waiting task is supported at a time
+
   TaskHandle_t waitingTaskHandle = nullptr;
 
   // Mutex to protect rendering operations from race conditions
-  // Must only be used via RenderLock
+  
   SemaphoreHandle_t renderingMutex = nullptr;
 
   // Whether to trigger a render after the current loop()
@@ -111,7 +98,7 @@ class ActivityManager {
   void requestUpdate(bool immediate = false);
 
   // Trigger a render and block until it completes.
-  // Must NOT be called from the render task or while holding a RenderLock.
+
   void requestUpdateAndWait();
 };
 

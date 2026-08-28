@@ -24,22 +24,12 @@ Anki flashcard review on the Xteink X3/X4 e-reader, built on [CrossPoint Reader]
 
 On the device: **Home → Anki**.
 
-- **AnkiConnect Server URL** — `http://<your computer's local IP>:8765`.
-- **API Key**- leave blank.
-- **Deck** - optional, restricts review to a single deck, fetched live from Anki.
-- **Start Review** - front, flip to back, grade with Again / Hard / Good / Easy.
+- AnkiConnect Server URL -`http://<your computer's local IP>:8765`.
+- API Key- leave blank.
+- Deck - optional, restricts review to a single deck, fetched live from Anki.
+- Start Review - front, flip to back, grade with Again / Hard / Good / Easy.
 
 Settings are saved to the device and persist across reboots.
-
-## Building from source
-
-```bash
-git clone --recursive https://github.com/crosspoint-reader/crosspoint-reader
-cd crosspoint-reader
-cp -r /path/to/firmware-patch/* .
-pip install platformio
-python -m platformio run -e default -t upload
-```
 
 ## Compatibility
 
